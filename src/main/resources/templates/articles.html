@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/laout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css"
+          th:href="@{css/bootstrap.min.css}">
+    <title>Articles</title>
+</head>
+<body>
+
+
+<section layout:fragment="content">
+    <section class="container mt-4">
+        <div class="row">
+            <div class="d-flex flex-wrap justify-content-center">
+                <div th:each="category : ${listCategories}" class="m-2">
+                    <a th:href="@{/index(categoryId=${category.id}, page=${currentPage})}"
+                       class="btn btn-outline-primary">
+                        <span th:text="${category.description}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Liste d'Articles</h3>
+            </div>
+
+            <form th:action="@{/index}" method="get"
+                  class="d-flex justify-content-center gap-2 m-2">
+                <label for="keyword"></label>
+                <input id="keyword" type="text" name="keyword"
+                       class="form-control"
+                       placeholder="Search" th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Marque</th>
+                        <th>Description</th>
+                        <th>Prix</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="article:${listArticles}">
+                        <td th:text="${article.id}"></td>
+                        <td th:text="${article.brand}"></td>
+                        <td th:text="${article.description}"></td>
+                        <td th:text="${article.price}"></td>
+                        <td>
+                            <a class="btn btn-danger"
+                               th:href="@{/delete(id=${article.id}, page=${currentPage}, keyword=${keyword})}">Delete</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary"
+                               th:href="@{/modify(id=${article.id})}">Edit</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item"
+                    th:class="${ currentPage==status.index } ? 'active' : '' "
+                    th:each="page, status:${numberOfPages}">
+                    <a class="page-link"
+                       th:href="@{/index(page=${status.index }, keyword=${keyword}, categoryId=${categoryId})}"
+                       th:text="${status.index + 1}"></a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</section>
+</body>
+</html>

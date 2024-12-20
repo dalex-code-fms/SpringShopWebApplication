@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css"
+          th:href="@{css/bootstrap.min.css}">
+    <title>Home</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FMS Shop</a>
+            <ul class="navbar-nav d-flex flex-row gap-2 mb-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" th:href="@{/index}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/article}">Ajouter
+                        Article</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Panier</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section layout:fragment="content"></section>
+</main>
+
+<footer class="text-center py-4">
+    <p>&copy; 2024 FMS Shop. Tous droits réservés.</p>
+</footer>
+</body>
+</html>
