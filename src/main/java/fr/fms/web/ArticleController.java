@@ -76,14 +76,21 @@ public class ArticleController {
     public String modify(Model model, Long id) {
         Optional<Article> article = articleRepository.findById(id);
 
-        List<Category> category = categoryRepository.findAll();
+        List<Category> listOfCategories = categoryRepository.findAll();
         if (article.isPresent()) {
             model.addAttribute("article", article.get());
-            model.addAttribute("category", category);
+            model.addAttribute("listOfCategories", listOfCategories);
 
             return "modifyArticle";
         } else {
             return "redirect:/index";
         }
+    }
+
+    @PostMapping("/modify")
+    public String modify(Model model, @Valid Article article, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return "article";
+        articleRepository.save(article);
+        return "redirect:/index";
     }
 }
