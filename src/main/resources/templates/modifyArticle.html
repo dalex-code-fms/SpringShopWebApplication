@@ -9,6 +9,36 @@
     <title>Modification d'article</title>
 </head>
 <body>
+<div class="container mt-4">
+    <h2>Modifier l'Article</h2>
 
+    <form th:action="@{/modify}" method="post">
+        <input type="hidden" th:field="${article.id}"/>
+
+        <div class="mb-3">
+            <label for="brand" class="form-label">Marque</label>
+            <input type="text" id="brand" th:field="${article.brand}"
+                   class="form-control" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" id="description"
+                   th:field="${article.description}"
+                   class="form-control" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Prix</label>
+            <input type="number" id="price" th:field="${article.price}"
+                   class="form-control" required/>
+        </div>
+
+        
+        <button type="submit" class="btn btn-primary">Enregistrer les
+            modifications
+        </button>
+    </form>
+</div>
 </body>
 </html>

@@ -51,7 +51,10 @@ public class ArticleController {
 
     @GetMapping("/article")
     public String article(Model model) {
+        List<Category> listOfCategories = categoryRepository.findAll();
         model.addAttribute("article", new Article());
+        model.addAttribute("listOfCategories", listOfCategories);
+
         return "article";
     }
 
@@ -73,10 +76,14 @@ public class ArticleController {
     public String modify(Model model, Long id) {
         Optional<Article> article = articleRepository.findById(id);
 
+        List<Category> category = categoryRepository.findAll();
         if (article.isPresent()) {
             model.addAttribute("article", article.get());
-        }
+            model.addAttribute("category", category);
 
-        return "modifyArticle";
+            return "modifyArticle";
+        } else {
+            return "redirect:/index";
+        }
     }
 }
