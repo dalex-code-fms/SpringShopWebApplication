@@ -131,8 +131,5 @@ public class ArticleController {
         return "cart";
     }
 
-    @GetMapping("/customerDetails")
-    public String customerDetails(Model model) {
-
-    }
+   
 }
