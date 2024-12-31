@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-5">
+        <div class="card">
+
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Panier</h3>
+            </div>
+
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Marque</th>
+                        <th>Description</th>
+                        <th>Prix</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="article:${listOfArticles}">
+                        <td th:text="${article.id}"></td>
+                        <td th:text="${article.brand}"></td>
+                        <td th:text="${article.description}"></td>
+                        <td th:text="${article.price}"></td>
+                        <td>
+                            <a class="btn btn-danger"
+                               th:href="@{/deleteFromCart(id=${article.id})}">Delete</a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${listOfArticles.empty}">
+                        <td colspan="5" class="texte">Votre panier est
+                            vide.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <a th:if="${#lists.size(listOfArticles) > 0}"
+                   th:href="@{/customerDetails}"
+                   class="btn btn-success">Passer
+                    commande</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

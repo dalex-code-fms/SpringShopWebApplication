@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,9 @@ public class ArticleController {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    List<Article> listOfArticlesInTheCart = new ArrayList<>();
+
 
     @GetMapping("/index")
     public String index(Model model,
@@ -92,5 +96,43 @@ public class ArticleController {
         if (bindingResult.hasErrors()) return "article";
         articleRepository.save(article);
         return "redirect:/index";
+    }
+
+    @GetMapping("/addToCart")
+    public String addToCart(Model model, Long id) {
+        Optional<Article> article = articleRepository.findById(id);
+
+        if (article.isPresent()) {
+            listOfArticlesInTheCart.add(article.get());
+        }
+
+        return "redirect:/index";
+    }
+
+    @GetMapping("/cart")
+    public String cart(Model model) {
+
+        listOfArticlesInTheCart.forEach(System.out::println);
+        model.addAttribute("listOfArticles", listOfArticlesInTheCart);
+        return "cart";
+    }
+
+    @GetMapping("/deleteFromCart")
+    public String deleteFromCart(Model model, Long id) {
+
+        boolean removed = listOfArticlesInTheCart.removeIf(article -> article.getId().equals(id));
+
+        if (removed) {
+            System.out.println("L'article à bien été supprimé");
+        } else {
+            System.out.println("L'article n'a pas été supprimé");
+        }
+        model.addAttribute("listOfArticles", listOfArticlesInTheCart);
+        return "cart";
+    }
+
+    @GetMapping("/customerDetails")
+    public String customerDetails(Model model) {
+
     }
 }
