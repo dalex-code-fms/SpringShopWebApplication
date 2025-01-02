@@ -64,11 +64,11 @@
                                 au
                                 Panier</a>
                         </td>
-                        <td>
+                        <td sec:authorize="hasAuthority('ROLE_ADMIN')">
                             <a class="btn btn-danger"
                                th:href="@{/delete(id=${article.id}, page=${currentPage}, keyword=${keyword})}">Delete</a>
                         </td>
-                        <td>
+                        <td sec:authorize="hasAuthority('ROLE_ADMIN')">
                             <a class="btn btn-primary"
                                th:href="@{/modify(id=${article.id})}">Edit</a>
                         </td>
