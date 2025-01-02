@@ -140,4 +140,9 @@ public class ArticleController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("/logoutConfirm")
+    public String logoutConfirm() {
+        return "logoutConfirm";
+    }
 }

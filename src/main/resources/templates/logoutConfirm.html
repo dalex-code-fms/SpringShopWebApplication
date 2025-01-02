@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de déconnection</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h2>Voulez-vous vraiment vous déconnecter ?</h2>
+    <form action="#" th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-success">Oui</button>
+        <a href="#" th:href="@{/index}" class="btn btn-danger">Non</a>
+    </form>
+</section>
+</body>
+</html>
