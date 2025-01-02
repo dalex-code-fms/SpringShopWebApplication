@@ -17,11 +17,11 @@
             </div>
 
             <div class="card-body">
-                <form th:action="@{/connection}" method="post" class="row g-3">
+                <form th:action="@{/login}" method="post" class="row g-3">
 
                     <div class="form-group">
                         <label for="username" class="form-label"></label>
-                        <input type="text" id="username"
+                        <input type="text" id="username" name="username"
                                class="form-control" placeholder="Pseudo"
                                required/>
                     </div>
@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label for="password"
                                class="form-label"></label>
-                        <input type="password" id="password"
+                        <input type="password" id="password" name="password"
                                class="form-control" placeholder="Mot de passe"
                                required/>
                     </div>
