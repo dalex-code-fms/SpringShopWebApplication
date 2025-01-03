@@ -1,13 +1,10 @@
 package fr.fms.web;
 
 import fr.fms.business.IJobImpl;
-import fr.fms.dao.ArticleRepository;
-import fr.fms.dao.CategoryRepository;
 import fr.fms.entities.Article;
 import fr.fms.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,20 +106,5 @@ public class ArticleController {
 
         model.addAttribute("listOfArticles", iJob.getArticlesInTheCart());
         return "cart";
-    }
-
-    @GetMapping("/403")
-    public String error() {
-        return "403";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/logoutConfirm")
-    public String logoutConfirm() {
-        return "logoutConfirm";
     }
 }
