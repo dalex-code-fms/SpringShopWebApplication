@@ -23,7 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder pe = passwordEncoder();
 
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
@@ -41,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/login").defaultSuccessUrl("/index");
-        http.authorizeRequests().antMatchers("/confirm", "/porder", "/order", "/save", "/delete", "/edit", "/article").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/confirm", "/porder", "/order").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/logoutConfirm", "/confirm", "/porder", "/order", "/save", "/delete", "/edit", "/article").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/logoutConfirm", "/confirm", "/porder", "/order").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN");
 
         http.exceptionHandling().accessDeniedPage("/403");
 

@@ -1,7 +1,5 @@
 package fr.fms.entities;
 
-import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;

@@ -1,5 +1,6 @@
 package fr.fms.web;
 
+import fr.fms.business.IJobImpl;
 import fr.fms.dao.ArticleRepository;
 import fr.fms.dao.CategoryRepository;
 import fr.fms.entities.Article;
@@ -21,14 +22,11 @@ import java.util.Optional;
 
 @Controller
 public class ArticleController {
-    @Autowired
-    ArticleRepository articleRepository;
+    private static final String REDIRECT_INDEX = "redirect:/index";
+    private static final String ARTICLE = "article";
 
     @Autowired
-    CategoryRepository categoryRepository;
-
-    List<Article> listOfArticlesInTheCart = new ArrayList<>();
-
+    IJobImpl iJob;
 
     @GetMapping("/index")
     public String index(Model model,
@@ -36,98 +34,81 @@ public class ArticleController {
                         @RequestParam(name = "keyword", defaultValue = "") String keyword,
                         @RequestParam(name = "categoryId", defaultValue = "") Long categoryId) {
 
-        Page<Article> articles;
-        if (categoryId != null) {
-            articles = articleRepository.findByCategoryId(categoryId, PageRequest.of(page, 5));
-        } else {
-            articles = articleRepository.findByDescriptionContains(keyword, PageRequest.of(page, 5));
-        }
+        Page<Article> articles = iJob.getArticles(page, keyword, categoryId);
+        List<Category> categories = iJob.getAllCategories();
 
-        List<Category> categories = categoryRepository.findAll();
         model.addAttribute("listArticles", articles.getContent());
         model.addAttribute("listCategories", categories);
         model.addAttribute("numberOfPages", new int[articles.getTotalPages()]);
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
+
         return "articles";
     }
 
     @GetMapping("/article")
     public String article(Model model) {
-        List<Category> listOfCategories = categoryRepository.findAll();
-        model.addAttribute("article", new Article());
+        List<Category> listOfCategories = iJob.getAllCategories();
+        model.addAttribute(ARTICLE, new Article());
         model.addAttribute("listOfCategories", listOfCategories);
 
-        return "article";
+        return ARTICLE;
     }
 
     @PostMapping("/save")
     public String save(Model model, @Valid Article article, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return "article";
-        articleRepository.save(article);
-        return "redirect:/index";
+        if (bindingResult.hasErrors()) return ARTICLE;
+
+        iJob.saveArticle(article);
+        return REDIRECT_INDEX;
     }
 
     @GetMapping("/delete")
     public String delete(Long id, int page, String keyword) {
-        articleRepository.deleteById(id);
+        iJob.deleteArticle(id);
 
         return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
 
     @GetMapping("/modify")
     public String modify(Model model, Long id) {
-        Optional<Article> article = articleRepository.findById(id);
+        Optional<Article> article = iJob.getArticleById(id);
 
-        List<Category> listOfCategories = categoryRepository.findAll();
         if (article.isPresent()) {
-            model.addAttribute("article", article.get());
+
+            List<Category> listOfCategories = iJob.getAllCategories();
+
+            model.addAttribute(ARTICLE, article.get());
             model.addAttribute("listOfCategories", listOfCategories);
 
             return "modifyArticle";
         } else {
-            return "redirect:/index";
+            return REDIRECT_INDEX;
         }
-    }
-
-    @PostMapping("/modify")
-    public String modify(Model model, @Valid Article article, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return "article";
-        articleRepository.save(article);
-        return "redirect:/index";
     }
 
     @GetMapping("/addToCart")
     public String addToCart(Model model, Long id) {
-        Optional<Article> article = articleRepository.findById(id);
+        Optional<Article> article = iJob.getArticleById(id);
 
-        if (article.isPresent()) {
-            listOfArticlesInTheCart.add(article.get());
-        }
+        article.ifPresent(iJob::addArticleToCart);
 
-        return "redirect:/index";
+        return REDIRECT_INDEX;
     }
 
     @GetMapping("/cart")
     public String cart(Model model) {
-
-        listOfArticlesInTheCart.forEach(System.out::println);
-        model.addAttribute("listOfArticles", listOfArticlesInTheCart);
+        model.addAttribute("listOfArticles", iJob.getArticlesInTheCart());
         return "cart";
     }
 
     @GetMapping("/deleteFromCart")
     public String deleteFromCart(Model model, Long id) {
 
-        boolean removed = listOfArticlesInTheCart.removeIf(article -> article.getId().equals(id));
+        iJob.removeArticleFromCart(id);
 
-        if (removed) {
-            System.out.println("L'article à bien été supprimé");
-        } else {
-            System.out.println("L'article n'a pas été supprimé");
-        }
-        model.addAttribute("listOfArticles", listOfArticlesInTheCart);
+        model.addAttribute("listOfArticles", iJob.getArticlesInTheCart());
         return "cart";
     }
 
